@@ -1,7 +1,7 @@
 const cors_proxy = require('./lib/cors-anywhere');
 
-const host = process.env.HOST || '0.0.0.0';
-const port = process.env.PORT || 8080;
+const host = process.env.HOST || 'https://fast-ocean-15097-d809f6758eac.herokuapp.com';
+const port = process.env.PORT || 43589;
 
 cors_proxy.createServer({
   originWhitelist: [], // Allow all origins
