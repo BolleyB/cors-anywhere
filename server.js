@@ -1,13 +1,20 @@
 const cors_proxy = require('./lib/cors-anywhere');
 
-const host = process.env.HOST || 'https://fast-ocean-15097-d809f6758eac.herokuapp.com';
-const port = process.env.PORT || 43589;
+const host = process.env.HOST || '0.0.0.0';
+const port = process.env.PORT || 8080;
+require('dotenv').config();
+
+
+// Replace 'your-api-token' with your actual API token
+const apiToken = process.env.API_Token;
 
 cors_proxy.createServer({
   originWhitelist: [], // Allow all origins
   requireHeader: ['origin', 'x-requested-with'],
   removeHeaders: ['cookie', 'cookie2'],
-  // Handle preflight requests
+  setHeaders: {
+    Authorization: `Bearer ${apiToken}`, // Add your Authorization header here
+  },
   handleInitialRequest: (req, res) => {
     if (req.method === 'OPTIONS') {
       res.writeHead(204, {
