@@ -10,10 +10,10 @@ const apiToken = process.env.API_Token;
 
 cors_proxy.createServer({
   // originBlacklist: originBlacklist,
-  originWhitelist: originWhitelist,
+  // originWhitelist: originWhitelist,
   requireHeader: ['origin', 'x-requested-with', 'authorization'],
   setHeaders: {"authorization": "Bearer AstraCS:bBavfXQKWSlLdoFvJmPTujXU:5b6b5810e8ae911816f12298dfb4b28a3d5a85d957f95405c818d65891c81e96"},
-  checkRateLimit: checkRateLimit,
+  // checkRateLimit: checkRateLimit,
   removeHeaders: [
     'cookie',
     'cookie2',
