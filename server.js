@@ -1,38 +1,31 @@
-const cors_proxy = require('./lib/cors-anywhere');
+const functions = require("firebase-functions");
+const cors_proxy = require("cors-anywhere");
+require("dotenv").config();
 
-const host = process.env.HOST || '0.0.0.0';
-const port = process.env.PORT || 8080;
-require('dotenv').config();
-
-
-// Replace 'your-api-token' with your actual API token
+// Authorization token
 const apiToken = process.env.API_Token;
 
-cors_proxy.createServer({
-  // originBlacklist: originBlacklist,
-  // originWhitelist: originWhitelist,
-  requireHeader: ['origin', 'x-requested-with', 'authorization'],
-  setHeaders: {"authorization": "Bearer AstraCS:bBavfXQKWSlLdoFvJmPTujXU:5b6b5810e8ae911816f12298dfb4b28a3d5a85d957f95405c818d65891c81e96"},
-  // checkRateLimit: checkRateLimit,
+const proxyServer = cors_proxy.createServer({
+  requireHeader: ["origin", "x-requested-with", "authorization"],
+  setHeaders: {
+    authorization: `Bearer ${apiToken}`,
+  },
   removeHeaders: [
-    'cookie',
-    'cookie2',
-    // Strip Heroku-specific headers
-    'x-request-start',
-    'x-request-id',
-    'via',
-    'connect-time',
-    'total-route-time',
-    // Other Heroku added debug headers
-    // 'x-forwarded-for',
-    // 'x-forwarded-proto',
-    // 'x-forwarded-port',
+    "cookie",
+    "cookie2",
+    "x-request-start",
+    "x-request-id",
+    "via",
+    "connect-time",
+    "total-route-time",
   ],
   redirectSameOrigin: true,
   httpProxyOptions: {
-    // Do not add X-Forwarded-For, etc. headers, because Heroku already adds it.
     xfwd: false,
   },
-}).listen(port, host, function() {
-  console.log('Running CORS Anywhere on ' + host + ':' + port);
+});
+
+exports.proxy = functions.https.onRequest((req, res) => {
+  console.log("Incoming request:", req.url);
+  proxyServer.emit("request", req, res);
 });
